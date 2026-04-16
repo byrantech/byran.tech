@@ -10,5 +10,6 @@
       "@assets/*": ["src/assets/*"],
       "@/*": ["src/*"]
     }
-  }
+  },
+  "exclude": ["archive", "dist", "node_modules"]
 }
