@@ -30,6 +30,17 @@ a {
 	cursor: none !important;
 }
 
+@media (pointer: coarse) {
+	body,
+	a {
+		cursor: auto !important;
+	}
+
+	.invertedcursor {
+		display: none !important;
+	}
+}
+
 .invertedcursor {
 	position: fixed;
 	top:0;
@@ -98,6 +109,16 @@ article {
 .animate.show {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.animate,
+	.animate.show,
+	.blend,
+	.invertedcursor {
+		transition: none !important;
+		animation: none !important;
+	}
 }
 
 article img {

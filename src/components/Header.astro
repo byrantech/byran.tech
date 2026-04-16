@@ -1,12 +1,10 @@
 ---
-import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
 ---
 
-<header class="w-screen fixed top-0 flex justify-center items-center z-10">
-	<nav class="border-slate-700 border w-[400px] h-8 rounded-3xl backdrop-blur-sm bg-neutral-800 bg-opacity-50 my-5 px-3 flex items-center">
-		<a href="/" class="px-3"><img src={"/logo.svg"} alt="Logo" class="w-7" /></a>
-		<ul class="text-slate-100 w-full flex justify-between gap-8 italic text-sm px-5">
+<header class="w-full fixed top-0 left-0 flex justify-center items-center z-20 px-3 sm:px-0">
+	<nav class="border-slate-700 border w-full max-w-[420px] h-10 rounded-3xl backdrop-blur-sm bg-neutral-800/60 mt-4 mb-3 px-2 sm:px-3 flex items-center">
+		<a href="/" class="px-2 sm:px-3 shrink-0"><img src={"/logo.svg"} alt="Logo" class="w-6 sm:w-7" /></a>
+		<ul class="text-slate-100 w-full flex justify-between gap-2 sm:gap-6 italic text-xs sm:text-sm px-2 sm:px-4">
 			<li>
 				<a href="/about">About</a>
 			</li>

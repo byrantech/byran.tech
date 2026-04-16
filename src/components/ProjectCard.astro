@@ -13,7 +13,7 @@ type Props = {
 const { title, text, icon, href, highlights, starCount } = Astro.props
 ---
 
-<a href={href} target="_blank" class="w-fit max-w-96 px-3 py-2 group rounded border flex flex-col gap-2 items-left border-neutral-700 hover:bg-neutral-800 blend">
+<a href={href} target="_blank" rel="noopener noreferrer" class="w-full max-w-96 px-3 py-2 group rounded border flex flex-col gap-2 items-left border-neutral-700 hover:bg-neutral-800 blend">
   <div class="flex flex-row gap-2 items-center">
     <img src={`/${icon}.svg`} height="20" width="20" />
     <span class="text-md md:text-lg font-bold font-[Hubot] text-neutral-100 group-hover:text-white blend">

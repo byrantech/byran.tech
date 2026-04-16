@@ -2,18 +2,9 @@
 import BaseHead from "@/components/BaseHead.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 import MeteorShower from "@/components/MeteorShower.astro";
 import StackCard from "@/components/StackCard.astro";
 import ProjectCard from "@/components/ProjectCard.astro";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
 import InteractiveCarousel from "@components/Carousel";
 
 const stack = [
@@ -60,7 +51,7 @@ const electricalEngineeringProjects = [
 		text: "A highly integrated, high end, open source laptop. Mission: to disprove the idea that technology is either repairable and open or integrated and closed.",
 		highlights:
 			"RK3588-based, 4K AMOLED 13.3 display, GHz-level high-speed signaling...",
-		starCount: "1.6k",
+		starCount: "4.0k",
 		icon: "anyon_e_logo",
 		href: "https://byran.ee",
 	},
@@ -176,67 +167,54 @@ const graphicsImages = [
 
 <!doctype html>
 <script>
-	import LocomotiveScroll from "locomotive-scroll";
-
-	const locomotiveScroll = new LocomotiveScroll();
-	const buttons = document.querySelectorAll("span.clickable");
-
-	// Handle clicks on each button.
-	buttons.forEach((button) => {
-		button.addEventListener("click", () => {
-			const targetElement = document.getElementById(
-				button.id + "_target"
-			);
-			if (targetElement) {
-				locomotiveScroll.scrollTo(targetElement);
-			}
+	document.addEventListener("DOMContentLoaded", () => {
+		const buttons = document.querySelectorAll("span.clickable");
+		buttons.forEach((button) => {
+			button.addEventListener("click", () => {
+				const targetElement = document.getElementById(`${button.id}_target`);
+				targetElement?.scrollIntoView({ behavior: "smooth", block: "start" });
+			});
 		});
-	});
 
-	var cursor = document.getElementById("cursor");
-	document.body.addEventListener("mousemove", function (e) {
-		//storing cursor position as variables
-		var curX = e.clientX;
-		var curY = e.clientY;
-		if (cursor) {
-			cursor.style.opacity = "1";
-			if (cursor.classList.contains("hover")) {
-				cursor.style.transform =
-					"translate(" + (curX - 30) + "px," + (curY - 30) + "px)";
-			} else {
-				cursor.style.transform =
-					"translate(" + (curX - 27) + "px," + (curY - 27) + "px)";
-			}
-		}
-	});
+		// Keep custom cursor for fine pointers only (desktop/laptops).
+		if (!window.matchMedia("(pointer: fine)").matches) return;
 
-	window.onblur = function () {
-		if (cursor) {
+		const cursor = document.getElementById("cursor");
+		if (!cursor) return;
+
+		let rafPending = false;
+		let pendingX = 0;
+		let pendingY = 0;
+		document.body.addEventListener(
+			"mousemove",
+			(e) => {
+				pendingX = e.clientX;
+				pendingY = e.clientY;
+				if (rafPending) return;
+				rafPending = true;
+				requestAnimationFrame(() => {
+					rafPending = false;
+					cursor.style.opacity = "1";
+					const offset = cursor.classList.contains("hover") ? 30 : 27;
+					cursor.style.transform = `translate(${pendingX - offset}px, ${pendingY - offset}px)`;
+				});
+			},
+			{ passive: true }
+		);
+
+		window.addEventListener("blur", () => {
 			cursor.style.display = "none";
-		}
-	};
-	window.onfocus = function () {
-		if (cursor) {
+		});
+		window.addEventListener("focus", () => {
 			cursor.style.display = "block";
+		});
+
+		const links = document.querySelectorAll("a, .clickable");
+		for (const link of links) {
+			link.addEventListener("mouseenter", () => cursor.classList.add("hover"));
+			link.addEventListener("mouseleave", () => cursor.classList.remove("hover"));
 		}
-	};
-
-	const links = document.querySelectorAll("a, .clickable");
-
-	// Custom cursor change style on hover links
-	for (let x of links) {
-		x.addEventListener("mouseenter", () => {
-			if (cursor) {
-				cursor.classList.add("hover");
-			}
-		});
-
-		x.addEventListener("mouseleave", () => {
-			if (cursor) {
-				cursor.classList.remove("hover");
-			}
-		});
-	}
+	});
 </script>
 
 <html lang="en">
@@ -244,7 +222,7 @@ const graphicsImages = [
 		<BaseHead />
 	</head>
 	<body class="bg-neutral-900">
-		<div class="-z-10 absolute">
+		<div class="-z-10 absolute pointer-events-none" aria-hidden="true">
 			<!-- Dark Theme: Twinkling Stars / Metors -->
 			<div id="galaxy" class="fixed inset-0">
 				<div class="invert dark:invert-0">
@@ -260,15 +238,15 @@ const graphicsImages = [
 		</div>
 		<Header />
 		<div class="invertedcursor" id="cursor"></div>
-		<main class="flex items-center min-h-screen">
-			<div class="pl-12">
+		<main class="flex items-center min-h-screen pt-24 md:pt-14">
+			<div class="px-4 sm:px-8 md:pl-12 md:pr-8">
 				<h1
-					class="animate text-slate-100 font-[Hubot] font-black xl:text-9xl text-8xl italic"
+					class="animate text-slate-100 font-[Hubot] font-black text-5xl sm:text-7xl lg:text-8xl xl:text-9xl italic leading-[0.95]"
 				>
 					Hello, I'm Byran _
 				</h1>
 				<div
-					class="animate md:max-w-max max-w-[400px] flex md:flex-row flex-col gap-2 md:gap-8 py-10 md:py-3 text-slate-100 font-[Mona] text-2xl font-normal subpixel-antialiased italic pl-2"
+					class="animate md:max-w-max max-w-[400px] flex md:flex-row flex-col gap-3 md:gap-8 py-8 md:py-3 text-slate-100 font-[Mona] text-xl sm:text-2xl font-normal subpixel-antialiased italic pl-2"
 				>
 					<span
 						id="electrical_engineering"
@@ -328,17 +306,17 @@ const graphicsImages = [
 			</div>
 		</main>
 		<section
-			class="min-h-screen w-screen flex flex-col"
+			class="min-h-screen w-full flex flex-col px-4 sm:px-8 scroll-mt-20"
 			id="electrical_engineering_target"
 		>
 			<div>
 				<h1
-					class="text-slate-100 font-[Hubot] font-black text-7xl md:text-9xl italic"
+					class="text-slate-100 font-[Hubot] font-black text-4xl sm:text-6xl md:text-8xl italic"
 				>
 					Electrical Engineering
 				</h1>
 			</div>
-			<div class="flex flex-col items-center md:items-start md:flex-row p-12 self-center">
+			<div class="flex flex-col items-center md:items-start md:flex-row gap-4 md:gap-6 py-6 md:py-12 self-center">
 				<section>
 					<div class="flex flex-wrap flex-col items-left gap-2 pt-1">
 						{
@@ -355,7 +333,7 @@ const graphicsImages = [
 						}
 					</div>
 				</section>
-				<div class="md:px-5 p-5">
+				<div class="md:px-5 p-2 sm:p-4">
 					<InteractiveCarousel
 						imagePaths={electricalEngineeringImages}
 						client:load
@@ -364,17 +342,17 @@ const graphicsImages = [
 			</div>
 		</section>
 		<section
-			class="min-h-screen w-screen flex flex-col"
+			class="min-h-screen w-full flex flex-col px-4 sm:px-8 scroll-mt-20"
 			id="embedded_software_target"
 		>
 			<div>
 				<h1
-					class="text-slate-100 font-[Hubot] font-black text-7xl md:text-9xl italic"
+					class="text-slate-100 font-[Hubot] font-black text-4xl sm:text-6xl md:text-8xl italic"
 				>
 					Embedded Software
 				</h1>
 			</div>
-			<div class="flex flex-col items-center md:items-start md:flex-row p-12 self-center">
+			<div class="flex flex-col items-center md:items-start md:flex-row gap-4 md:gap-6 py-6 md:py-12 self-center">
 				<section>
 					<div class="flex flex-wrap flex-col items-left gap-2 pt-1">
 						{
@@ -391,7 +369,7 @@ const graphicsImages = [
 						}
 					</div>
 				</section>
-				<div class="md:px-5 p-5">
+				<div class="md:px-5 p-2 sm:p-4">
 					<InteractiveCarousel
 						imagePaths={embeddedSoftwareImages}
 						client:load
@@ -400,17 +378,17 @@ const graphicsImages = [
 			</div>
 		</section>
 		<section
-			class="min-h-screen w-screen flex flex-col"
+			class="min-h-screen w-full flex flex-col px-4 sm:px-8 scroll-mt-20"
 			id="front-end_dev_target"
 		>
 			<div>
 				<h1
-					class="text-slate-100 font-[Hubot] font-black text-7xl md:text-9xl italic"
+					class="text-slate-100 font-[Hubot] font-black text-4xl sm:text-6xl md:text-8xl italic"
 				>
 					Front-End Development
 				</h1>
 			</div>
-			<div class="flex flex-col items-center md:items-start md:flex-row p-12 self-center">
+			<div class="flex flex-col items-center md:items-start md:flex-row gap-4 md:gap-6 py-6 md:py-12 self-center">
 				<section>
 					<div class="flex flex-wrap flex-col items-left gap-2 pt-1">
 						{
@@ -426,7 +404,7 @@ const graphicsImages = [
 						}
 					</div>
 				</section>
-				<div class="md:px-5 p-5">
+				<div class="md:px-5 p-2 sm:p-4">
 					<InteractiveCarousel
 						imagePaths={frontEndImages}
 						client:load
@@ -435,17 +413,17 @@ const graphicsImages = [
 			</div>
 		</section>
 		<section
-			class="min-h-screen w-screen flex flex-col"
+			class="min-h-screen w-full flex flex-col px-4 sm:px-8 scroll-mt-20"
 			id="3d_graphics_target"
 		>
 			<div>
 				<h1
-					class="text-slate-100 font-[Hubot] font-black text-7xl md:text-9xl italic"
+					class="text-slate-100 font-[Hubot] font-black text-4xl sm:text-6xl md:text-8xl italic"
 				>
 					3D Graphics
 				</h1>
 			</div>
-			<div class="flex flex-col items-center md:items-start md:flex-row p-12 self-center">
+			<div class="flex flex-col items-center md:items-start md:flex-row gap-4 md:gap-6 py-6 md:py-12 self-center">
 				<section>
 					<div class="flex flex-wrap flex-col items-left gap-2 pt-1">
 						{
@@ -460,7 +438,7 @@ const graphicsImages = [
 						}
 					</div>
 				</section>
-				<div class="md:px-5 p-5">
+				<div class="md:px-5 p-2 sm:p-4">
 					<InteractiveCarousel
 						imagePaths={graphicsImages}
 						client:load
